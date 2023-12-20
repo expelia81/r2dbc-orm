@@ -1,7 +1,7 @@
 package com.r2dbc.orm.first_draft.query;
 
-import com.r2dbc.orm.first_draft.annotations.R2dbcTable;
-import com.r2dbc.orm.first_draft.annotations.R2dbcJoinColumn;
+import com.r2dbc.orm.annotations.R2dbcTable;
+import com.r2dbc.orm.annotations.R2dbcJoinColumn;
 import com.r2dbc.orm.first_draft.exception.common.CommonExceptions;
 import com.r2dbc.orm.first_draft.pageable.PageableUtils;
 import java.util.Map;
@@ -20,7 +20,7 @@ import reactor.core.publisher.Mono;
  * @see Id 선언되어있지 않은 엔티티는 에러가 발생할 수 있음.
  */
 //@Slf4j
-public class R2dbcORM {
+public interface R2dbcORM {
 
   /**
    * @param filter 검색 조건

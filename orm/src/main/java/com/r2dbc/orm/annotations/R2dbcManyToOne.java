@@ -1,6 +1,7 @@
-package com.r2dbc.orm.first_draft.annotations;
+package com.r2dbc.orm.annotations;
 
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -13,26 +14,23 @@ import org.springframework.core.annotation.AliasFor;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface R2dbcJoinColumn {
+public @interface R2dbcManyToOne{
 
   @AliasFor("name")
   String value() default "id";
 
   /**
-   *  기존 테이블 내에서의 join 기준 컬럼명.
-   *  (many to one : fk 필드명. 필수입력)
-   *  (one to many : pk 필드명. 기본값은 id)  -> 만약 pk가 id가 아닌 경우, name을 통해 pk 필드명을 지정해야함.
+   * 테이블 자신의 칼럼명을 의미한다.
    */
   @AliasFor("value")
   String name() default "id";
 
   /**
-   * join 대상 테이블의 별칭.
+   * 대상 테이블의 별칭.
+   * 자기 참조 테이블의 경우에 반드시 지정해야한다.
    * 미정시 해당 테이블의 별칭은 기본 별칭을 따른다.
    */
   String alias() default "";
-
-  JoinType joinType() default JoinType.MANY_TO_ONE;
 
   /**
    * join 대상 테이블의 join 기준 컬럼명.

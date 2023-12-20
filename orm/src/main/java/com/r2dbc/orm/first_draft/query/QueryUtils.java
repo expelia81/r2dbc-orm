@@ -1,9 +1,9 @@
 package com.r2dbc.orm.first_draft.query;
 
 import com.r2dbc.orm.first_draft.StringUtils;
-import com.r2dbc.orm.first_draft.annotations.R2dbcJoinColumn;
-import com.r2dbc.orm.first_draft.annotations.R2dbcManyToMany;
-import com.r2dbc.orm.first_draft.annotations.R2dbcTable;
+import com.r2dbc.orm.annotations.R2dbcJoinColumn;
+import com.r2dbc.orm.annotations.R2dbcManyToMany;
+import com.r2dbc.orm.annotations.R2dbcTable;
 import com.r2dbc.orm.first_draft.pageable.PageableUtils;
 import java.lang.reflect.Field;
 import java.util.Map;
