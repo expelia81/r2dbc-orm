@@ -19,10 +19,73 @@ public interface R2dbcOrmSimpleRepository<T, ID> {
    * 2. 해당 인터페이스 구현체가 생성될 때, 메소드 내용 덮어쓴 가짜 객체를 대신 주입받도록 수정. (아마, 이 부분에서 )
    */
 
+  DatabaseClient client = null;
+
 
   Mono<T> findById(ID id, DatabaseClient client);
   Flux<T> findAll(DatabaseClient client);
   Flux<T> findAll(DatabaseClient client, Pageable pageable);
   Flux<T> findByFilter(DatabaseClient client, Map<String, String> filter);
   Flux<T> findByFilter(DatabaseClient client, Map<String, String> filter, Pageable pageable);
+
+
+
+  static <T,ID> R2dbcOrmSimpleRepository<T,ID> simple(DatabaseClient client) {
+    return new R2dbcOrmSimpleRepository<>() {
+      @Override
+      public Mono<T> findById(ID id, DatabaseClient client) {
+        return null;
+      }
+
+      @Override
+      public Flux<T> findAll(DatabaseClient client) {
+        return null;
+      }
+
+      @Override
+      public Flux<T> findAll(DatabaseClient client, Pageable pageable) {
+        return null;
+      }
+
+      @Override
+      public Flux<T> findByFilter(DatabaseClient client, Map<String, String> filter) {
+        return null;
+      }
+
+      @Override
+      public Flux<T> findByFilter(DatabaseClient client, Map<String, String> filter,
+          Pageable pageable) {
+        return null;
+      }
+    };
+  }
+  static <T,ID> R2dbcOrmSimpleRepository<T,ID> complete(DatabaseClient client) {
+    return new R2dbcOrmSimpleRepository<>() {
+      @Override
+      public Mono<T> findById(ID id, DatabaseClient client) {
+        return null;
+      }
+
+      @Override
+      public Flux<T> findAll(DatabaseClient client) {
+        return null;
+      }
+
+      @Override
+      public Flux<T> findAll(DatabaseClient client, Pageable pageable) {
+        return null;
+      }
+
+      @Override
+      public Flux<T> findByFilter(DatabaseClient client, Map<String, String> filter) {
+        return null;
+      }
+
+      @Override
+      public Flux<T> findByFilter(DatabaseClient client, Map<String, String> filter,
+          Pageable pageable) {
+        return null;
+      }
+    };
+  }
 }
