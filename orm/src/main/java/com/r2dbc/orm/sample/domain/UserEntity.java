@@ -6,7 +6,7 @@ import lombok.Builder;
 import org.springframework.data.annotation.Id;
 
 @Builder
-@R2dbcTable(name = "user")
+@R2dbcTable("user")
 public class UserEntity {
 
   @Id
