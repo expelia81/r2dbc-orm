@@ -1,6 +1,7 @@
 package com.r2dbc.orm.a_second_draft.query.impl;
 
 import com.r2dbc.orm.a_second_draft.query.QueryCreator;
+import java.util.Map;
 
 public class SimpleQueryCreator implements QueryCreator {
 
@@ -15,7 +16,22 @@ public class SimpleQueryCreator implements QueryCreator {
   }
 
   @Override
-  public <T, ID> String findById(Class<T> entityClass, Class<ID> idClass) {
+  public <T, ID> String filterById(Class<T> entityClass, Class<ID> idClass) {
+    return null;
+  }
+
+  @Override
+  public <T> String paging(Class<T> entityClass) {
+    return null;
+  }
+
+  @Override
+  public <T> String filter(Class<T> entityClass, Map<String, String> filter) {
+    return null;
+  }
+
+  @Override
+  public <T> String filterWithPaging(Class<T> entityClass, Map<String, String> filter) {
     return null;
   }
 }

@@ -28,13 +28,18 @@ public class R2dbcOrmSimpleRepository<T, ID> implements R2dbcOrmRepository<T, ID
   private String selectQuery;
   private String findByIdQuery;
 
+  private Map<Pageable, String> paging;
+  private Map<String, String> whereQuery;
+  private Map<String, String> wherePageQuery;
+
+
 
   public R2dbcOrmSimpleRepository(Class<T> entityClass, Class<ID> idClass) {
     this.entityClass = entityClass;
     this.idClass = idClass;
     this.countQuery = queryCreator.count(entityClass);
     this.selectQuery = queryCreator.select(entityClass, idClass);
-    this.findByIdQuery = selectQuery + queryCreator.findById(entityClass, idClass);
+    this.findByIdQuery = selectQuery + queryCreator.filterById(entityClass, idClass);
   }
 
   @Override
