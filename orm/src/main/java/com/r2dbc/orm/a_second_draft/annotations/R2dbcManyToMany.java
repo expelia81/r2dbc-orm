@@ -1,4 +1,4 @@
-package com.r2dbc.orm.annotations;
+package com.r2dbc.orm.a_second_draft.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

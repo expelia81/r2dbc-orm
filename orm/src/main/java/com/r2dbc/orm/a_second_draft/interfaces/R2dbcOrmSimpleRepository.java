@@ -1,9 +1,13 @@
 package com.r2dbc.orm.a_second_draft.interfaces;
 
+import com.r2dbc.orm.a_second_draft.QueryFactory;
 import com.r2dbc.orm.a_second_draft.map.RelationMapper;
 import com.r2dbc.orm.a_second_draft.query.QueryCreator;
-import com.r2dbc.orm.a_second_draft.query.factory.QueryFactory;
+
+import java.lang.reflect.TypeVariable;
 import java.util.Map;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.r2dbc.core.DatabaseClient;
 import reactor.core.publisher.Flux;
@@ -14,6 +18,7 @@ import reactor.core.publisher.Mono;
  * @param <T> 타겟 엔티티 타입
  * @param <ID> 타겟 엔티티의 Id 필드 타입
  */
+@Slf4j
 public class R2dbcOrmSimpleRepository<T, ID> implements R2dbcOrmRepository<T, ID> {
 
   /**
@@ -24,9 +29,9 @@ public class R2dbcOrmSimpleRepository<T, ID> implements R2dbcOrmRepository<T, ID
   private final QueryCreator queryCreator = QueryFactory.simple();
   private final Class<T> entityClass;
   private final Class<ID> idClass;
-  private String countQuery;
-  private String selectQuery;
-  private String findByIdQuery;
+  private final String countQuery;
+  private final String selectQuery;
+  private final String findByIdQuery;
 
   private Map<Pageable, String> paging;
   private Map<String, String> whereQuery;
@@ -45,9 +50,9 @@ public class R2dbcOrmSimpleRepository<T, ID> implements R2dbcOrmRepository<T, ID
   @Override
   public Mono<T> findById(ID id, DatabaseClient client) {
     return client.sql(findByIdQuery)
-        .bind("id", id)
-        .map(row -> RelationMapper.toEntity(row, entityClass, client))
-        .one();
+          .bind("id", id)
+          .map(row -> RelationMapper.toEntity(row, entityClass, client))
+          .one();
   }
 
   @Override
@@ -59,23 +64,26 @@ public class R2dbcOrmSimpleRepository<T, ID> implements R2dbcOrmRepository<T, ID
 
   @Override
   public Flux<T> findAll(DatabaseClient client, Pageable pageable) {
-    return client.sql(selectQuery + )
-        .map(row -> RelationMapper.toEntity(row, entityClass, client))
-        .all();
+//    return client.sql(selectQuery + )
+//        .map(row -> RelationMapper.toEntity(row, entityClass, client))
+//        .all();
+    return null;
   }
 
   @Override
   public Flux<T> findByFilter(DatabaseClient client, Map<String, String> filter) {
-    return client.sql(selectQuery + queryCreator.where(entityClass, filter))
-        .map(row -> RelationMapper.toEntity(row, entityClass, client))
-        .all();
+//    return client.sql(selectQuery + queryCreator.where(entityClass, filter))
+//        .map(row -> RelationMapper.toEntity(row, entityClass, client))
+//        .all();
+    return null;
   }
 
   @Override
   public Flux<T> findByFilter(DatabaseClient client, Map<String, String> filter,
       Pageable pageable) {
-    return client.sql(selectQuery + queryCreator.where(entityClass, filter) + queryCreator.)
-        .map(row -> RelationMapper.toEntity(row, entityClass, client))
-        .all();
+    return null;
+//    return client.sql(selectQuery + queryCreator.where(entityClass, filter) + queryCreator.)
+//        .map(row -> RelationMapper.toEntity(row, entityClass, client))
+//        .all();
   }
 }

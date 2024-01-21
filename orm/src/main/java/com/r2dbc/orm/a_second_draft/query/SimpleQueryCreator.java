@@ -1,4 +1,4 @@
-package com.r2dbc.orm.a_second_draft.query.impl;
+package com.r2dbc.orm.a_second_draft.query;
 
 import com.r2dbc.orm.a_second_draft.query.QueryCreator;
 import java.util.Map;

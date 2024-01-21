@@ -3,4 +3,6 @@ spring:
   r2dbc:
     url: r2dbc:mariadb://localhost:3306/R2DBC_ORM
     username: root
-    password: mariadb
+    password:
+server:
+  port: 8888

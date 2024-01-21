@@ -1,8 +1,8 @@
 package com.r2dbc.orm.first_draft.query;
 
 import com.r2dbc.orm.first_draft.StringUtils;
-import com.r2dbc.orm.annotations.R2dbcJoinColumn;
-import com.r2dbc.orm.annotations.R2dbcTable;
+import com.r2dbc.orm.first_draft.annotations.R2dbcJoinColumn;
+import com.r2dbc.orm.first_draft.annotations.R2dbcTable;
 import io.r2dbc.spi.Row;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

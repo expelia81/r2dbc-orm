@@ -1,6 +1,6 @@
 package com.r2dbc.orm.sample.domain;
 
-import com.r2dbc.orm.annotations.R2dbcJoinColumn;
+import com.r2dbc.orm.first_draft.annotations.R2dbcJoinColumn;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.boot.autoconfigure.security.SecurityProperties.User;

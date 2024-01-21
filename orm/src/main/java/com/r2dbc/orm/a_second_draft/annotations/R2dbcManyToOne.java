@@ -1,11 +1,11 @@
-package com.r2dbc.orm.annotations;
+package com.r2dbc.orm.a_second_draft.annotations;
+
+import org.springframework.core.annotation.AliasFor;
 
 import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import org.springframework.core.annotation.AliasFor;
 
 /**
  * 주의사항 : OneToMany를 쓰더라도, List로 선언하면 안되고 Object 자체로 선언해야함.

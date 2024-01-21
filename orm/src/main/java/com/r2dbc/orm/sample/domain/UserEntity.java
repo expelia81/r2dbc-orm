@@ -1,6 +1,6 @@
 package com.r2dbc.orm.sample.domain;
 
-import com.r2dbc.orm.annotations.R2dbcTable;
+import com.r2dbc.orm.first_draft.annotations.R2dbcTable;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import org.springframework.data.annotation.Id;
