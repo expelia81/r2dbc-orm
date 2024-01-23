@@ -24,6 +24,18 @@ public class SimpleJoinQueryCreator implements JoinQueryCreator{
 	@Override
 	public QueryWrapper createSelectClauseWithJoin(@NonNull Class<?> clazz, QueryWrapper existingQuery, String tableAlias, boolean alreadyOneToMany) {
 
+
+		/*
+		 * 흐름
+		 * 1. 필드 순회
+		 * 2. 필드 확인하고 연관관계 있을 경우 필드별 조인쿼리 추가할 수 있는 기능 따로 빼서 추가
+		 * ----> ManyToOne, OneToMany, ManyToMany 따로 빼야만 한다.
+		 * 3. 아닐 경우 필드를 쿼리에 추가.
+		 *
+		 * 이 과정은 Join이 발생하면 Queue에 쌓고, 마지막 단계에서 Queue에서 하나씩 꺼내며 재귀를 반복한다.
+		 * 한 번 조회된 별칭의 도메인은 재귀를 수행하지 않는다.
+		 */
+
 		R2dbcTable mainTable = AnnotationUtils.getAnnotation(clazz, R2dbcTable.class);
 
 		String prefix = tableAlias!=null && !tableAlias.isBlank() ? tableAlias: mainTable.alias();
