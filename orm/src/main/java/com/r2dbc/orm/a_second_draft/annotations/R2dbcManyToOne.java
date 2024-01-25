@@ -2,10 +2,7 @@ package com.r2dbc.orm.a_second_draft.annotations;
 
 import org.springframework.core.annotation.AliasFor;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * 주의사항 : OneToMany를 쓰더라도, List로 선언하면 안되고 Object 자체로 선언해야함.
@@ -13,6 +10,7 @@ import java.lang.annotation.Target;
  * OneToMany : targetEntity, targetColumnName 필수입력
  */
 @Retention(RetentionPolicy.RUNTIME)
+@Inherited
 @Target(ElementType.FIELD)
 public @interface R2dbcManyToOne{
 

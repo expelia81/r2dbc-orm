@@ -1,6 +1,6 @@
 package com.r2dbc.orm.first_draft.query;
 
-import com.r2dbc.orm.first_draft.StringUtils;
+import com.r2dbc.orm.a_second_draft.utils.StringUtils;
 import com.r2dbc.orm.first_draft.annotations.R2dbcJoinColumn;
 import com.r2dbc.orm.first_draft.annotations.R2dbcManyToMany;
 import com.r2dbc.orm.first_draft.annotations.R2dbcTable;

@@ -1,10 +1,7 @@
 package com.r2dbc.orm.a_second_draft.interfaces;
 
-import com.r2dbc.orm.a_second_draft.QueryFactory;
 import com.r2dbc.orm.a_second_draft.map.RelationMapper;
-import com.r2dbc.orm.a_second_draft.query.QueryCreator;
 
-import java.lang.reflect.TypeVariable;
 import java.util.Map;
 
 import lombok.extern.slf4j.Slf4j;

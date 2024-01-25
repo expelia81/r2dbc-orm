@@ -1,6 +1,6 @@
 package com.r2dbc.orm.first_draft.pageable;
 
-import com.r2dbc.orm.first_draft.StringUtils;
+import com.r2dbc.orm.a_second_draft.utils.StringUtils;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import lombok.extern.slf4j.Slf4j;

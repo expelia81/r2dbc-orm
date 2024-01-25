@@ -21,4 +21,7 @@ public class FieldUtils {
       return getFields(clazz.getSuperclass(), result);
     }
   }
+
+  public static void addSelectFieldQuery(QueryWrapper query, Field field, String alias) {
+  }
 }
