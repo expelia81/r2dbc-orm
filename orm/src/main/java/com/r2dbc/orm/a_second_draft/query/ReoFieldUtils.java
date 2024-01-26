@@ -110,7 +110,6 @@ public class ReoFieldUtils {
 
 	public static void addSelectFieldQuery(QueryWrapper query, Field field, String alias) {
 		String columnName = getColumnName(field);
-		gg
 		query.getSelect().append(alias).append(".").append(columnName).append(" as ").append(alias).append("_").append(columnName).append(", ");
 	}
 }
