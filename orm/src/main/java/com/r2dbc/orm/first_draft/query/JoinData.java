@@ -1,5 +1,6 @@
 package com.r2dbc.orm.first_draft.query;
 
+import com.r2dbc.orm.a_second_draft.join.QueryCreator;
 import com.r2dbc.orm.first_draft.annotations.R2dbcJoinColumn;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,5 +15,6 @@ public class JoinData {
   private String alias;
   private R2dbcJoinColumn.JoinType joinType;
   private boolean alreadyOneToMany;
+//  private QueryCreator queryCreator;
 }
 

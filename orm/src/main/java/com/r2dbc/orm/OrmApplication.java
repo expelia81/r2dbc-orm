@@ -1,6 +1,7 @@
 package com.r2dbc.orm;
 
 import com.r2dbc.orm.a_second_draft.interfaces.R2dbcOrmRepository;
+import com.r2dbc.orm.sample.entity.User;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -9,10 +10,9 @@ public class OrmApplication {
 
   public static void main(String[] args) {
     SpringApplication.run(OrmApplication.class, args);
-    R2dbcOrmRepository<Integer, Object> repo = R2dbcOrmRepository.simple(Integer.class, Object.class);
+    R2dbcOrmRepository<User, String> repo = R2dbcOrmRepository.simple(User.class, String.class);
 
-    repo.findById(1, null)
-            .subscribe();
+    System.out.println(repo.getSelectQuery());
   }
 
 }

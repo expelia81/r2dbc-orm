@@ -1,12 +1,8 @@
 package com.r2dbc.orm.first_draft.query;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
-import com.r2dbc.orm.a_second_draft.utils.StringUtils;
-import com.r2dbc.orm.a_second_draft.annotations.R2dbcTable;
+import com.r2dbc.orm.a_second_draft.query.R2oTableUtils;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,17 +15,20 @@ import lombok.extern.slf4j.Slf4j;
 public class QueryWrapper {
   private StringBuilder select;
   private StringBuilder from;
-  private final List<String> queriedAlias = new ArrayList<>();
+  private final Set<String> queriedAlias = new HashSet<>();
 
   private final Queue<JoinData> joinData = new LinkedList<>();
 
   @Override
   public String toString() {
-    String select = this.select.toString();
+    String select = this.select.toString().trim();
     if (select.endsWith(",")) {
       select = select.substring(0, select.length() - 1);
     }
-    return "SELECT " + select.toString() + " " + from.toString() + " ";
+
+    String result = "SELECT " + select + " " + from.toString() + " ";
+//    log.trace("query : {}", result);
+    return result;
   }
 
   public QueryWrapper(StringBuilder select, StringBuilder from) {
@@ -37,18 +36,23 @@ public class QueryWrapper {
     this.from = from;
   }
 
-  public static QueryWrapper create(R2dbcTable mainTable) {
-    String alias;
+  public static QueryWrapper create(Class<?> mainTable) {
     if (mainTable == null) {
       log.error("mainTable is null");
       throw new IllegalArgumentException("mainTable is null");
     }
 
-    if (StringUtils.isBlank(mainTable.alias())) {
-      alias = mainTable.name();
-    } else {
-      alias = mainTable.alias();
-    }
-    return new QueryWrapper( new StringBuilder(), new StringBuilder(" FROM " + mainTable.name() + " " + mainTable.alias() + " "));
+    String alias = R2oTableUtils.getTableAlias(mainTable);
+    String name = R2oTableUtils.getTableName(mainTable);
+
+    QueryWrapper queryWrapper = new QueryWrapper( new StringBuilder(), new StringBuilder(" FROM " + name + " " + alias + " "));
+
+    queryWrapper.queriedAlias.add(alias);
+
+    return queryWrapper;
+  }
+
+  public boolean isJoined(String joinTargetAlias) {
+    return queriedAlias.contains(joinTargetAlias);
   }
 }

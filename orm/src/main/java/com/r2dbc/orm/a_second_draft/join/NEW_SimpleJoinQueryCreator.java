@@ -1,14 +1,10 @@
 package com.r2dbc.orm.a_second_draft.join;
 
-import com.r2dbc.orm.a_second_draft.annotations.*;
-import com.r2dbc.orm.a_second_draft.query.ReoFieldUtils;
-import com.r2dbc.orm.a_second_draft.utils.StringUtils;
-import com.r2dbc.orm.first_draft.query.FieldUtils;
+import com.r2dbc.orm.a_second_draft.annotations.R2oTransient;
+import com.r2dbc.orm.a_second_draft.query.R2oFieldUtils;
+import com.r2dbc.orm.a_second_draft.query.R2oTableUtils;
 import com.r2dbc.orm.first_draft.query.QueryWrapper;
-import com.r2dbc.orm.first_draft.query.R2dbcORM;
 import lombok.NonNull;
-import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.data.annotation.Transient;
 
 import java.lang.reflect.Field;
 
@@ -16,9 +12,7 @@ public class NEW_SimpleJoinQueryCreator implements QueryCreator{
 
 	public QueryWrapper createSelectQueryWithJoin(@NonNull Class<?> clazz) {
 
-		R2dbcTable mainTable = AnnotationUtils.getAnnotation(clazz, R2dbcTable.class);
-
-		QueryWrapper queryWrapper = QueryWrapper.create(mainTable);
+		QueryWrapper queryWrapper = QueryWrapper.create(clazz);
 
 		return this.createSelectQueryRecursive(clazz, queryWrapper, null, false);
 	}
@@ -41,14 +35,15 @@ public class NEW_SimpleJoinQueryCreator implements QueryCreator{
 		 *
 		 * 이 과정은 Join이 발생하면 Queue에 쌓고, 마지막 단계에서 Queue에서 하나씩 꺼내며 재귀를 반복한다.
 		 * 한 번 조회된 별칭의 도메인은 재귀를 수행하지 않는다.
+		 *
+		 * alreadyOneToMany가 참조형이 아닌 이유
+		 * -> 재귀를 돌며 같은 레이어에 있는 OneToMany
 		 */
 
-		R2dbcTable mainTable = AnnotationUtils.getAnnotation(clazz, R2dbcTable.class);
-
 		/* 이번 사이클에서 사용할 별칭을 선언한다. */
-		String alias = StringUtils.isBlank(tableAlias) ? mainTable.alias() : tableAlias;
+		String alias = R2oTableUtils.getTableAlias(clazz);
 
-		Field[] allFields = ReoFieldUtils.getAllFields(clazz);
+		Field[] allFields = R2oFieldUtils.getAllFields(clazz);
 
 		for (Field field : allFields) {
 			/* @Slf4j 사용시, log라는 필드가 생겨나므로, 무시해야한다.*/
@@ -57,30 +52,11 @@ public class NEW_SimpleJoinQueryCreator implements QueryCreator{
 			/* 필드가 @R2oTransient이면 무시한다. */
 			if (field.isAnnotationPresent(R2oTransient.class)) continue;
 
-			/* 여기부터는 ManyToOne 공통 메소드로 빠질 수 있다. */
-			if (field.isAnnotationPresent(R2dbcManyToOne.class)) {
-				ReoFieldUtils.manyToOne(query, field, alias, alreadyOneToMany, this);
-			}
-
-//			/* 여기부터는 OneToMany 공통 메소드로 빠질 수 있다. */
-//			else if (field.isAnnotationPresent(R2dbcOneToMany.class)) ReoFieldUtils.oneToMany(query, field, alias, alreadyOneToMany);
-//
-//			/* 여기부터는 ManyToMany 공통 메소드로 빠질 수 있다. */
-//			else if (field.isAnnotationPresent(R2dbcManyToMany.class)) ReoFieldUtils.manyToMany(query, field, alias, alreadyOneToMany);
-
-
-			/* 여기부터는 필드를 쿼리에 추가하는 공통 메소드로 빠질 수 있다. */
-			else {
-				ReoFieldUtils.addSelectFieldQuery(query, field, alias);
-			}
-
-
-
+			/* 여기부터는 ManyToOne 공통 메소드로 빠질 수 있다.
+			 * TODO 여기도 JoinLevel에 따라서 다른 행동을 보장받을 수 있어야한다. */
+			R2oFieldUtils.parseField(field, clazz, alias, alreadyOneToMany, query, this);
 
 		}
-
-
-
 
 		return query;
 	}

@@ -24,7 +24,7 @@ public @interface R2dbcManyToOne{
   String name() default "id";
 
   /**
-   * 대상 테이블의 별칭.
+   * join 대상 테이블의 별칭.
    * 자기 참조 테이블의 경우에 반드시 지정해야한다.
    * 미정시 해당 테이블의 별칭은 기본 별칭을 따른다.
    */
@@ -32,22 +32,9 @@ public @interface R2dbcManyToOne{
 
   /**
    * join 대상 테이블의 join 기준 컬럼명.
-   *  (many to one : 타겟 엔티티의 pk 필드명. 기본값 : id)  -> 만약 타겟 엔티티의 pk가 id가 아닌 경우, pk 필드명 지정해야함.
-   *  (one to many : 타겟 엔티티의 fk 필드명.)
-   *  (many to many : 타겟 엔티티의 pk 필드명. 기본값 : id)
+   * 비어있을 경우, 해당 엔티티의 @Id 칼럼명을 따른다.
    */
-  String targetColumnName() default "id";
-
-  /**
-   * one to many에서만 사용. join 대상 테이블의 엔티티 클래스.
-   * 이것으로 list의 리플렉션 매핑을 한다.
-   */
-  Class<?> targetEntity() default Object.class;
+  String targetColumnName() default "";
 
 
-  enum JoinType {
-    MANY_TO_ONE,
-    ONE_TO_MANY
-
-  }
 }

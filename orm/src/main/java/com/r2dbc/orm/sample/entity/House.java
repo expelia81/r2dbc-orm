@@ -2,7 +2,7 @@ package com.r2dbc.orm.sample.entity;
 
 import org.springframework.data.annotation.Id;
 
-public class HouseEntity {
+public class House {
 
   @Id
   private String id;

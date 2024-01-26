@@ -37,18 +37,4 @@ public class StringUtils {
   public static boolean isBlank(String str) {
     return str == null || str.isBlank();
   }
-
-
-  public static String mapToQueryString(Map<String, String> parameters) {
-    StringBuilder sb = new StringBuilder();
-    for (Map.Entry<String, String> entry : parameters.entrySet()) {
-      if (sb.length() > 0) {
-        sb.append("&");
-      }
-      sb.append(entry.getKey());
-      sb.append("=");
-      sb.append(entry.getValue());
-    }
-    return sb.toString();
-  }
 }

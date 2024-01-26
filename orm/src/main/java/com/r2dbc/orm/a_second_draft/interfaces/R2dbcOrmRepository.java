@@ -19,12 +19,13 @@ public interface R2dbcOrmRepository<T, ID> {
    */
 
 
-  Mono<T> findById(ID id, DatabaseClient client);
-  Flux<T> findAll(DatabaseClient client);
-  Flux<T> findAll(DatabaseClient client, Pageable pageable);
-  Flux<T> findByFilter(DatabaseClient client, Map<String, String> filter);
-  Flux<T> findByFilter(DatabaseClient client, Map<String, String> filter, Pageable pageable);
+//  Mono<T> findById(ID id, DatabaseClient client);
+//  Flux<T> findAll(DatabaseClient client);
+//  Flux<T> findAll(DatabaseClient client, Pageable pageable);
+//  Flux<T> findByFilter(DatabaseClient client, Map<String, String> filter);
+//  Flux<T> findByFilter(DatabaseClient client, Map<String, String> filter, Pageable pageable);
 
+  String getSelectQuery();
   /* ManyToOne만 포함하는 레포지터리. */
   static <T,ID> R2dbcOrmRepository<T,ID> simple(Class<T> entityClass, Class<ID> idClass) {
     return new R2dbcOrmSimpleRepository<T, ID>(entityClass, idClass);
