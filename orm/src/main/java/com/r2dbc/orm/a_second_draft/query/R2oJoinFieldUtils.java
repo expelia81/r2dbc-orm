@@ -1,10 +1,8 @@
 package com.r2dbc.orm.a_second_draft.query;
 
 import com.r2dbc.orm.a_second_draft.annotations.R2dbcManyToOne;
-import com.r2dbc.orm.a_second_draft.annotations.R2dbcTable;
-import com.r2dbc.orm.a_second_draft.join.QueryCreator;
+import com.r2dbc.orm.a_second_draft.query.creator.QueryCreator;
 import com.r2dbc.orm.a_second_draft.utils.StringUtils;
-import com.r2dbc.orm.first_draft.query.QueryWrapper;
 import org.springframework.core.annotation.AnnotationUtils;
 
 import java.lang.reflect.Field;

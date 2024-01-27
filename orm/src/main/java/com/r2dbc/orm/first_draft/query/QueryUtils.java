@@ -1,5 +1,7 @@
 package com.r2dbc.orm.first_draft.query;
 
+import com.r2dbc.orm.a_second_draft.query.join.JoinData;
+import com.r2dbc.orm.a_second_draft.query.QueryWrapper;
 import com.r2dbc.orm.a_second_draft.utils.StringUtils;
 import com.r2dbc.orm.first_draft.annotations.R2dbcJoinColumn;
 import com.r2dbc.orm.first_draft.annotations.R2dbcManyToMany;
@@ -241,7 +243,8 @@ public class QueryUtils {
         existingQuery
         : new QueryWrapper(
         new StringBuilder(),
-        new StringBuilder(" FROM " + mainTable.name() + " " + prefix + " ")
+        new StringBuilder(" FROM " + mainTable.name() + " " + prefix + " "),
+            null
     );
     if (existingQuery==null) {
       queryWrapper.getQueriedAlias().add(mainTable.alias());
@@ -290,12 +293,12 @@ public class QueryUtils {
         /* 테이블의 별칭이 중복되지 않는다면 체크하고, 조인 큐에 밀어넣는다. 중복된다면, 연관관계를 쿼리하지 않는다.*/
         if (!queryWrapper.getQueriedAlias().contains(joinTableAlias)) {
           queryWrapper.getQueriedAlias().add(joinTableAlias);
-          queryWrapper.getJoinData().add(
+          queryWrapper.getJoinQueue().add(
               JoinData
                   .builder()
-                  .alias(joinTableAlias)
+                  .originAlias(joinTableAlias)
                   .targetEntity(targetEntity)
-                  .joinType(joinColumn.joinType())
+//                  .joinType(joinColumn.joinType())
                   .alreadyOneToMany(joinColumn.joinType().equals(R2dbcJoinColumn.JoinType.ONE_TO_MANY))
                   .build());
         } else {
@@ -386,10 +389,10 @@ public class QueryUtils {
     }
 
     /* 조인 큐를 확인하고, join을 수행한다. */
-    while (!queryWrapper.getJoinData().isEmpty()) {
-      JoinData poll = queryWrapper.getJoinData().poll();
+    while (!queryWrapper.getJoinQueue().isEmpty()) {
+      JoinData poll = queryWrapper.getJoinQueue().poll();
       if (poll != null){
-          getSingleSelectClauseWithJoin(poll.getTargetEntity(), queryWrapper, poll.getAlias(), poll.isAlreadyOneToMany());
+          getSingleSelectClauseWithJoin(poll.getTargetEntity(), queryWrapper, poll.getOriginAlias(), poll.isAlreadyOneToMany());
       }
     }
 

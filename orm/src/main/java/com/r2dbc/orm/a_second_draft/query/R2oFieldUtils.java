@@ -1,9 +1,10 @@
 package com.r2dbc.orm.a_second_draft.query;
 
 import com.r2dbc.orm.a_second_draft.annotations.R2dbcManyToOne;
-import com.r2dbc.orm.a_second_draft.join.QueryCreator;
+import com.r2dbc.orm.a_second_draft.query.creator.QueryCreator;
+import com.r2dbc.orm.a_second_draft.query.join.JoinData;
+import com.r2dbc.orm.a_second_draft.query.join.R2oJoinType;
 import com.r2dbc.orm.a_second_draft.utils.StringUtils;
-import com.r2dbc.orm.first_draft.query.QueryWrapper;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.relational.core.mapping.Column;
 
@@ -57,7 +58,6 @@ public class R2oFieldUtils {
 		return getFields(clazz, new ArrayList<>());
 	}
 
-	//TODO List 사용 배제, 배열만으로 동작하도록 해야함.
 	private static Field[] getFields(Class<?> clazz, List<Field> result) {
 		result.addAll(Arrays.asList(clazz.getDeclaredFields()));
 		/* 슈퍼 클래스가 Object면 바로 리턴. */
@@ -80,21 +80,25 @@ public class R2oFieldUtils {
 						.append(", ");
 	}
 
-	public static void parseField(Field field, Class<?> clazz, String alias, boolean alreadyOneToMany, QueryWrapper query, QueryCreator queryCreator) {
+	public static void parseField(Field field, Class<?> clazz, String originAlias, boolean alreadyOneToMany, QueryWrapper query, QueryCreator queryCreator) {
+		//TODO
 		if (field.isAnnotationPresent(R2dbcManyToOne.class)) {
-			R2oJoinFieldUtils.manyToOne(query, field, alias, alreadyOneToMany, queryCreator);
-		}
+			R2oFieldUtils.addSelectFieldQuery(query, field, originAlias);
+			query.getJoinQueue().add(JoinData.create(field.getType(), field, originAlias, R2oJoinType.MANY_TO_ONE, alreadyOneToMany));
 
-//			/* 여기부터는 OneToMany 공통 메소드로 빠질 수 있다. */
-//			else if (field.isAnnotationPresent(R2dbcOneToMany.class)) ReoFieldUtils.oneToMany(query, field, alias, alreadyOneToMany);
-//
+
+//			/* 여기부터는 OneToMany 공통 메소드로 빠질 수 있다. TODO oneToMany는 already반영을 잊으면 안된다. */
+//		} else if (field.isAnnotationPresent(R2dbcOneToMany.class)) {
+//			R2oJoinFieldUtils.oneToMany(query, field, originAlias, false, queryCreator);
 //			/* 여기부터는 ManyToMany 공통 메소드로 빠질 수 있다. */
-//			else if (field.isAnnotationPresent(R2dbcManyToMany.class)) ReoFieldUtils.manyToMany(query, field, alias, alreadyOneToMany);
+//		}	else if (field.isAnnotationPresent(R2dbcManyToMany.class)) {
+//			R2oJoinFieldUtils.manyToMany(query, field, originAlias, false, queryCreator);
+		}
 
 
 		/* 여기부터는 필드를 쿼리에 추가하는 공통 메소드로 빠질 수 있다. */
 		else {
-			R2oFieldUtils.addSelectFieldQuery(query, field, alias);
+			R2oFieldUtils.addSelectFieldQuery(query, field, originAlias);
 		}
 	}
 }

@@ -1,16 +1,9 @@
 package com.r2dbc.orm.a_second_draft.interfaces;
 
 import com.r2dbc.orm.a_second_draft.QueryFactory;
-import com.r2dbc.orm.a_second_draft.join.QueryCreator;
-import com.r2dbc.orm.a_second_draft.map.RelationMapper;
-
-import java.util.Map;
+import com.r2dbc.orm.a_second_draft.query.creator.QueryCreator;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
-import org.springframework.r2dbc.core.DatabaseClient;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 /**
  * OneToMany,ManyToMany를 타겟 엔티티 내부에서만 서치하는 심플한 레포지터리.

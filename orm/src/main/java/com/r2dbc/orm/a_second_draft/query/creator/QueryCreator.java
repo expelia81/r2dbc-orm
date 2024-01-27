@@ -1,6 +1,6 @@
-package com.r2dbc.orm.a_second_draft.join;
+package com.r2dbc.orm.a_second_draft.query.creator;
 
-import com.r2dbc.orm.first_draft.query.QueryWrapper;
+import com.r2dbc.orm.a_second_draft.query.QueryWrapper;
 import lombok.NonNull;
 
 public interface QueryCreator {

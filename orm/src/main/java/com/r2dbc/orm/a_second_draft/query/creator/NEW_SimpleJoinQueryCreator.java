@@ -1,20 +1,38 @@
-package com.r2dbc.orm.a_second_draft.join;
+package com.r2dbc.orm.a_second_draft.query.creator;
 
 import com.r2dbc.orm.a_second_draft.annotations.R2oTransient;
 import com.r2dbc.orm.a_second_draft.query.R2oFieldUtils;
 import com.r2dbc.orm.a_second_draft.query.R2oTableUtils;
-import com.r2dbc.orm.first_draft.query.QueryWrapper;
+import com.r2dbc.orm.a_second_draft.query.QueryWrapper;
+import com.r2dbc.orm.a_second_draft.query.join.JoinData;
+import com.r2dbc.orm.a_second_draft.utils.StringUtils;
 import lombok.NonNull;
 
 import java.lang.reflect.Field;
 
-public class NEW_SimpleJoinQueryCreator implements QueryCreator{
+public class NEW_SimpleJoinQueryCreator implements QueryCreator {
 
 	public QueryWrapper createSelectQueryWithJoin(@NonNull Class<?> clazz) {
 
-		QueryWrapper queryWrapper = QueryWrapper.create(clazz);
+		QueryWrapper query = QueryWrapper.create(clazz, this);
 
-		return this.createSelectQueryRecursive(clazz, queryWrapper, null, false);
+		this.createSelectQueryRecursive(clazz, query, null, false);
+
+		/* JoinQueue에 쌓인 조인을 수행한다. */
+		// alreadyOneToMany가 true인 경우에는 더이상 oneToMany를 수행하지 않는다.
+		// TODO simple, statdard, advanced, full에 따라 다르게 동작하게 구현을 변경해야한다.
+//		query.getJoinQueue()
+//						.forEach(joinData -> joinData.join(query, this));
+		while (!query.getJoinQueue().isEmpty()) {
+			JoinData poll = query.getJoinQueue().poll();
+			if (poll != null){
+				poll.join(query, this);
+			}
+		}
+
+
+
+		return query;
 	}
 
 	/**
@@ -41,7 +59,7 @@ public class NEW_SimpleJoinQueryCreator implements QueryCreator{
 		 */
 
 		/* 이번 사이클에서 사용할 별칭을 선언한다. */
-		String alias = R2oTableUtils.getTableAlias(clazz);
+		String alias = StringUtils.isBlank(tableAlias) ? R2oTableUtils.getTableAlias(clazz) : tableAlias;
 
 		Field[] allFields = R2oFieldUtils.getAllFields(clazz);
 

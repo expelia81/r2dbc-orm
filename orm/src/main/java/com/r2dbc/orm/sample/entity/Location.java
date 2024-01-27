@@ -5,7 +5,7 @@ import lombok.Builder;
 import org.springframework.data.annotation.Id;
 
 @Builder
-@R2dbcTable(alias = "LOCATION")
+@R2dbcTable(name = "LOCATION")
 public class Location {
 
   @Id
