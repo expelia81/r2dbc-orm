@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class StringUtils {
+public class R2oStringUtils {
 
   public static String camelToSnake(String string) {
     String regex = "([a-z])([A-Z]+)";

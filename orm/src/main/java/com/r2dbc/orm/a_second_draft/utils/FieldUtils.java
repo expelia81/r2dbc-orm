@@ -1,4 +1,4 @@
-package com.r2dbc.orm.first_draft.query;
+package com.r2dbc.orm.a_second_draft.utils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -25,5 +25,20 @@ public class FieldUtils {
   }
 
   public static void addSelectFieldQuery(QueryWrapper query, Field field, String alias) {
+  }
+
+  public static <T> void setField(T entity, Field field, Object value) {
+    if (value == null) return;
+    try {
+      field.setAccessible(true);
+      field.set(entity, value);
+    } catch (IllegalAccessException | IllegalArgumentException e) {
+      if (value instanceof List && !field.getType().equals(List.class)){
+        log.error("oneToMany field must be List Type : "+entity.getClass().getSimpleName() +" - "+field.getName());
+      } else {
+        log.error("can't set field : "+entity.getClass().getSimpleName() +" - "+field.getName());
+      }
+      log.error("but continue to mapping other fields");
+    }
   }
 }

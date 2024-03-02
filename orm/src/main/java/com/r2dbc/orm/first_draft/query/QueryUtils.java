@@ -2,11 +2,12 @@ package com.r2dbc.orm.first_draft.query;
 
 import com.r2dbc.orm.a_second_draft.query.join.JoinData;
 import com.r2dbc.orm.a_second_draft.query.QueryWrapper;
-import com.r2dbc.orm.a_second_draft.utils.StringUtils;
+import com.r2dbc.orm.a_second_draft.utils.FieldUtils;
+import com.r2dbc.orm.a_second_draft.utils.R2oStringUtils;
 import com.r2dbc.orm.first_draft.annotations.R2dbcJoinColumn;
 import com.r2dbc.orm.first_draft.annotations.R2dbcManyToMany;
 import com.r2dbc.orm.first_draft.annotations.R2dbcTable;
-import com.r2dbc.orm.first_draft.pageable.PageableUtils;
+import com.r2dbc.orm.a_second_draft.utils.PageableUtils;
 import java.lang.reflect.Field;
 import java.util.Map;
 import lombok.NonNull;
@@ -55,7 +56,7 @@ public class QueryUtils {
 
   private static void extracted(StringBuilder where, String alias, String key, String value) {
     if (key.split(",").length==1) {
-      where.append(alias).append(StringUtils.camelToSnake(key)).append(" = ").append("'").append(
+      where.append(alias).append(R2oStringUtils.camelToSnake(key)).append(" = ").append("'").append(
           value).append("'");
     } else {
       String condition = key.split(",")[0];
@@ -63,36 +64,36 @@ public class QueryUtils {
       switch (condition) {
         case "like" -> {
           if (value.startsWith("%") && value.endsWith("%"))
-            where.append(alias).append(StringUtils.camelToSnake(realKey)).append(" like ").append("'").append(
+            where.append(alias).append(R2oStringUtils.camelToSnake(realKey)).append(" like ").append("'").append(
                 value).append("'");
           else if (value.startsWith("%"))
-            where.append(alias).append(StringUtils.camelToSnake(realKey)).append(" like ").append("'%").append(
+            where.append(alias).append(R2oStringUtils.camelToSnake(realKey)).append(" like ").append("'%").append(
                 value).append("'");
           else if (value.endsWith("%"))
-            where.append(alias).append(StringUtils.camelToSnake(realKey)).append(" like ").append("'").append(
+            where.append(alias).append(R2oStringUtils.camelToSnake(realKey)).append(" like ").append("'").append(
                 value).append("%'");
           else
-            where.append(alias).append(StringUtils.camelToSnake(realKey)).append(" like ").append("'").append(
+            where.append(alias).append(R2oStringUtils.camelToSnake(realKey)).append(" like ").append("'").append(
                 value).append("'");
         }
-        case "not" -> where.append(alias).append(StringUtils.camelToSnake(realKey)).append(" != ").append("'").append(value).append("'");
-        case "gt" -> where.append(alias).append(StringUtils.camelToSnake(realKey)).append(" > ").append("'").append(value).append("'");
-        case "gte" -> where.append(alias).append(StringUtils.camelToSnake(realKey)).append(" >= ").append("'").append(value).append("'");
-        case "lt" -> where.append(alias).append(StringUtils.camelToSnake(realKey)).append(" < ").append("'").append(value).append("'");
-        case "lte" -> where.append(alias).append(StringUtils.camelToSnake(realKey)).append(" <= ").append("'").append(value).append("'");
-        case "in" -> where.append(alias).append(StringUtils.camelToSnake(realKey)).append(" in ").append("(").append(value).append(")");
-        case "notIn" -> where.append(alias).append(StringUtils.camelToSnake(realKey)).append(" not in ").append("(").append(value).append(")");
-        case "isNull" -> where.append(alias).append(StringUtils.camelToSnake(realKey)).append(" is null ");
-        case "isNotNull" -> where.append(alias).append(StringUtils.camelToSnake(realKey)).append(" is not null ");
+        case "not" -> where.append(alias).append(R2oStringUtils.camelToSnake(realKey)).append(" != ").append("'").append(value).append("'");
+        case "gt" -> where.append(alias).append(R2oStringUtils.camelToSnake(realKey)).append(" > ").append("'").append(value).append("'");
+        case "gte" -> where.append(alias).append(R2oStringUtils.camelToSnake(realKey)).append(" >= ").append("'").append(value).append("'");
+        case "lt" -> where.append(alias).append(R2oStringUtils.camelToSnake(realKey)).append(" < ").append("'").append(value).append("'");
+        case "lte" -> where.append(alias).append(R2oStringUtils.camelToSnake(realKey)).append(" <= ").append("'").append(value).append("'");
+        case "in" -> where.append(alias).append(R2oStringUtils.camelToSnake(realKey)).append(" in ").append("(").append(value).append(")");
+        case "notIn" -> where.append(alias).append(R2oStringUtils.camelToSnake(realKey)).append(" not in ").append("(").append(value).append(")");
+        case "isNull" -> where.append(alias).append(R2oStringUtils.camelToSnake(realKey)).append(" is null ");
+        case "isNotNull" -> where.append(alias).append(R2oStringUtils.camelToSnake(realKey)).append(" is not null ");
         case "between" -> {
           String value1 = value.split(",")[0];
           String value2 = value.split(",")[1];
-          where.append(alias).append(StringUtils.camelToSnake(realKey)).append(" between ").append("'").append(value1).append("'").append(" and ").append("'").append(value2).append("'");
+          where.append(alias).append(R2oStringUtils.camelToSnake(realKey)).append(" between ").append("'").append(value1).append("'").append(" and ").append("'").append(value2).append("'");
         }
         case "notBetween" -> {
           String value1 = value.split(",")[0];
           String value2 = value.split(",")[1];
-          where.append(alias).append(StringUtils.camelToSnake(realKey)).append(" not between ").append("'").append(value1).append("'").append(" and ").append("'").append(value2).append("'");
+          where.append(alias).append(R2oStringUtils.camelToSnake(realKey)).append(" not between ").append("'").append(value1).append("'").append(" and ").append("'").append(value2).append("'");
         }
         default -> throw new IllegalStateException("Filter에 들어가는 검색 조건이 문법에 맞지 않습니다. " + condition);
       }
@@ -141,7 +142,7 @@ public class QueryUtils {
     String pk = null;
     for (Field field : fields) {
       if (field.isAnnotationPresent(Id.class)) {
-        pk = StringUtils.camelToSnake(field.getName());
+        pk = R2oStringUtils.camelToSnake(field.getName());
         break;
       }
     }
@@ -210,7 +211,7 @@ public class QueryUtils {
 
       /* 조회할 칼럼 생성 */
       Column annotation = field.isAnnotationPresent(Column.class) ? field.getAnnotation(Column.class) : null;
-      String column = annotation == null || annotation.value().isBlank() ? StringUtils.camelToSnake(field.getName()) : annotation.value();
+      String column = annotation == null || annotation.value().isBlank() ? R2oStringUtils.camelToSnake(field.getName()) : annotation.value();
 
       /* 칼럼 별칭 추가 */
       String columnAlias = tableAliasExist ? " as " + tableAlias + "_" + column : "";
@@ -330,7 +331,7 @@ public class QueryUtils {
               R2dbcManyToMany manyToMany = field.getAnnotation(R2dbcManyToMany.class);
 
               String relationTableName = manyToMany.relationTableName();
-              String relationTableAlias = StringUtils.isBlank(manyToMany.relationTableAlias()) ? "relation_"+relationTableName : manyToMany.relationTableAlias();
+              String relationTableAlias = R2oStringUtils.isBlank(manyToMany.relationTableAlias()) ? "relation_"+relationTableName : manyToMany.relationTableAlias();
               String oneColumnName = manyToMany.oneColumnName();
               String manyColumnName = manyToMany.manyColumnName();
 
@@ -381,7 +382,7 @@ public class QueryUtils {
 
       /* 조회할 칼럼 생성 */
       Column annotation = field.isAnnotationPresent(Column.class) ? field.getAnnotation(Column.class) : null;
-      String column = annotation == null || annotation.value().isBlank() ? StringUtils.camelToSnake(field.getName()) : annotation.value();
+      String column = annotation == null || annotation.value().isBlank() ? R2oStringUtils.camelToSnake(field.getName()) : annotation.value();
 
       /* 사용된 별칭 추가 및 최종적인 칼럼 추가 */
       if (!temp.endsWith(", ") && !temp.isBlank()) select.append(", ");

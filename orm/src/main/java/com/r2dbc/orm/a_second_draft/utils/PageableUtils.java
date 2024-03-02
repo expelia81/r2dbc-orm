@@ -1,6 +1,6 @@
-package com.r2dbc.orm.first_draft.pageable;
+package com.r2dbc.orm.a_second_draft.utils;
 
-import com.r2dbc.orm.a_second_draft.utils.StringUtils;
+import com.r2dbc.orm.a_second_draft.utils.R2oStringUtils;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import lombok.extern.slf4j.Slf4j;
@@ -17,14 +17,14 @@ public class PageableUtils {
     // 입력된 sort 파라미터를 String 하나로 변경
     pageable.getSort()
             .forEach(order -> 
-                sort.set(sort.get() + ", " + putPrefix(prefix) + StringUtils.camelToSnake(order.getProperty()) + " " + order.getDirection().name())
+                sort.set(sort.get() + ", " + putPrefix(prefix) + R2oStringUtils.camelToSnake(order.getProperty()) + " " + order.getDirection().name())
             );
 
     log.info("sort : " + pageable.getSort());
     
     // 맨 앞 쉼표 제거 및 order by 절 추가
     String order = sort.get().replaceFirst(",", "");
-    if (StringUtils.isBlank(order)) return "";
+    if (R2oStringUtils.isBlank(order)) return "";
     return " ORDER BY" + order;
   }
   private static String putPrefix(String prefix) {

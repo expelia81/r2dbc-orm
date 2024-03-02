@@ -1,12 +1,10 @@
 package com.r2dbc.orm.a_second_draft.query;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
-import com.r2dbc.orm.a_second_draft.annotations.R2dbcManyToOne;
 import com.r2dbc.orm.a_second_draft.query.join.JoinData;
 import com.r2dbc.orm.a_second_draft.query.creator.QueryCreator;
-import com.r2dbc.orm.a_second_draft.query.join.R2oJoinType;
+import com.r2dbc.orm.a_second_draft.utils.R2oTableUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

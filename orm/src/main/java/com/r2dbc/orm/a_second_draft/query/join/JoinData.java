@@ -1,8 +1,6 @@
 package com.r2dbc.orm.a_second_draft.query.join;
 
-import com.r2dbc.orm.a_second_draft.annotations.R2dbcManyToOne;
 import com.r2dbc.orm.a_second_draft.query.QueryWrapper;
-import com.r2dbc.orm.a_second_draft.query.R2oJoinFieldUtils;
 import com.r2dbc.orm.a_second_draft.query.creator.QueryCreator;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,13 +33,13 @@ public class JoinData {
 
     switch (joinType){
       case MANY_TO_ONE:
-        R2oJoinFieldUtils.manyToOne(query, field, originAlias, alreadyOneToMany, queryCreator);
+        R2oQueryJoinUtils.manyToOne(query, field, originAlias, alreadyOneToMany, queryCreator);
         break;
       case ONE_TO_MANY:
-//        R2oJoinFieldUtils.oneToMany(query, field, originAlias, alreadyOneToMany, queryCreator);
+        R2oQueryJoinUtils.oneToMany(query, field, originAlias, alreadyOneToMany, queryCreator);
         break;
       case MANY_TO_MANY:
-//        R2oJoinFieldUtils.manyToMany(query, field, originAlias, alreadyOneToMany, queryCreator);
+        R2oQueryJoinUtils.manyToMany(query, field, originAlias, alreadyOneToMany, queryCreator);
         break;
       default:
         throw new IllegalArgumentException("joinType is not valid");

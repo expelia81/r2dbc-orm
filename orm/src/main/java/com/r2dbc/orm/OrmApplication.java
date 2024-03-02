@@ -10,9 +10,6 @@ public class OrmApplication {
 
   public static void main(String[] args) {
     SpringApplication.run(OrmApplication.class, args);
-    R2dbcOrmRepository<User, String> repo = R2dbcOrmRepository.simple(User.class, String.class);
-
-    System.out.println(repo.getSelectQuery());
   }
 
 }

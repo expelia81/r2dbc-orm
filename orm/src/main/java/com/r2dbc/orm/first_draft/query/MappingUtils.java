@@ -1,6 +1,7 @@
 package com.r2dbc.orm.first_draft.query;
 
-import com.r2dbc.orm.a_second_draft.utils.StringUtils;
+import com.r2dbc.orm.a_second_draft.utils.FieldUtils;
+import com.r2dbc.orm.a_second_draft.utils.R2oStringUtils;
 import com.r2dbc.orm.first_draft.annotations.R2dbcJoinColumn;
 import com.r2dbc.orm.first_draft.annotations.R2dbcTable;
 import io.r2dbc.spi.Row;
@@ -26,7 +27,7 @@ public class MappingUtils {
     T entity;
 
     /* 별칭이 지정된 상태로 시작되는 경우에는 입력된 별칭을, 그렇지 않다면 엔티티에 지정된 별칭을 가져간다. */
-    String defaultAlias = StringUtils.isBlank(joinAlias) ? table.alias() : joinAlias;
+    String defaultAlias = R2oStringUtils.isBlank(joinAlias) ? table.alias() : joinAlias;
     String alias = defaultAlias.isBlank() ? "" : defaultAlias+"_";
 
     /* 최초 호출일 경우, 기본 엔티티의 별칭을 추가한다. */
@@ -76,7 +77,6 @@ public class MappingUtils {
 
         /* 연관관계인 객체 매핑 시작. 만약 자기참조하는 객체인 경우에는, 해당 자식 객체에서는 연관관계를 매핑하지 않는다. */
         if (joinColumn.joinType().equals(R2dbcJoinColumn.JoinType.ONE_TO_MANY)) {
-
 //          log.info("last onetomany joined : " + defaultAlias + " ==> " + targetEntity.getAnnotation(R2dbcTable.class).alias());
           Object target = mapRowToEntityWithJoin(targetEntity, row, joinTableAlias, mappedAlias, targetEntity.equals(clazz), true);
           joinEntity = target != null ? List.of(target) : new ArrayList<>();
@@ -94,7 +94,7 @@ public class MappingUtils {
       }
 
       /* 필드명을 컬럼명으로 변환 */
-      String columnName = StringUtils.camelToSnake(field.getName());
+      String columnName = R2oStringUtils.camelToSnake(field.getName());
       if (field.isAnnotationPresent(Column.class) && !field.getAnnotation(Column.class).value().isBlank()) {
         columnName = field.getAnnotation(Column.class).value();
       }

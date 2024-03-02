@@ -1,5 +1,6 @@
-package com.r2dbc.orm.first_draft.query;
+package com.r2dbc.orm.a_second_draft.utils;
 
+import com.r2dbc.orm.a_second_draft.utils.FieldUtils;
 import com.r2dbc.orm.first_draft.annotations.R2dbcJoinColumn;
 import com.r2dbc.orm.first_draft.annotations.R2dbcTable;
 import java.lang.reflect.Field;
@@ -7,6 +8,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.r2dbc.orm.first_draft.query.MappingUtils;
+import com.r2dbc.orm.first_draft.query.QueryUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.Id;
@@ -15,7 +19,7 @@ import reactor.core.publisher.Flux;
 /**
  * DB에서의 JOIN을 직접적으로 지원하지 않는 R2DBC를 위한 JOIN 유틸리티.
  * 쿼리에 관여하는 기능의 제공은 이하 유틸클래스 참고.
- * @see QueryUtils,
+ * @see QueryUtils ,
  * @see MappingUtils
  */
 @Slf4j

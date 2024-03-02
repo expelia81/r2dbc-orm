@@ -36,4 +36,9 @@ public @interface R2dbcManyToMany {
    * 중간 관계 테이블 내에서, 타겟 테이블의 fk 필드명
    */
   String manyColumnName() default "";
+
+  /**
+   * join 대상 테이블의 엔티티 클래스.
+   */
+  Class<?> targetManyEntity();
 }

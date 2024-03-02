@@ -1,11 +1,15 @@
 package com.r2dbc.orm.a_second_draft.query.creator;
 
+import com.r2dbc.orm.a_second_draft.annotations.R2dbcManyToMany;
+import com.r2dbc.orm.a_second_draft.annotations.R2dbcManyToOne;
+import com.r2dbc.orm.a_second_draft.annotations.R2dbcOneToMany;
 import com.r2dbc.orm.a_second_draft.annotations.R2oTransient;
-import com.r2dbc.orm.a_second_draft.query.R2oFieldUtils;
-import com.r2dbc.orm.a_second_draft.query.R2oTableUtils;
+import com.r2dbc.orm.a_second_draft.utils.R2oFieldUtils;
+import com.r2dbc.orm.a_second_draft.utils.R2oTableUtils;
 import com.r2dbc.orm.a_second_draft.query.QueryWrapper;
 import com.r2dbc.orm.a_second_draft.query.join.JoinData;
-import com.r2dbc.orm.a_second_draft.utils.StringUtils;
+import com.r2dbc.orm.a_second_draft.query.join.R2oJoinType;
+import com.r2dbc.orm.a_second_draft.utils.R2oStringUtils;
 import lombok.NonNull;
 
 import java.lang.reflect.Field;
@@ -59,7 +63,7 @@ public class NEW_SimpleJoinQueryCreator implements QueryCreator {
 		 */
 
 		/* 이번 사이클에서 사용할 별칭을 선언한다. */
-		String alias = StringUtils.isBlank(tableAlias) ? R2oTableUtils.getTableAlias(clazz) : tableAlias;
+		String alias = R2oStringUtils.isBlank(tableAlias) ? R2oTableUtils.getTableAlias(clazz) : tableAlias;
 
 		Field[] allFields = R2oFieldUtils.getAllFields(clazz);
 
@@ -71,8 +75,19 @@ public class NEW_SimpleJoinQueryCreator implements QueryCreator {
 			if (field.isAnnotationPresent(R2oTransient.class)) continue;
 
 			/* 여기부터는 ManyToOne 공통 메소드로 빠질 수 있다.
-			 * TODO 여기도 JoinLevel에 따라서 다른 행동을 보장받을 수 있어야한다. */
-			R2oFieldUtils.parseField(field, clazz, alias, alreadyOneToMany, query, this);
+			 * TODO JoinLevel에 따라서 다른 행동을 보장받을 수 있어야한다. */
+			if (field.isAnnotationPresent(R2dbcManyToOne.class)) {
+				R2oFieldUtils.addSelectFieldQuery(query, field, alias);
+				query.getJoinQueue().add(JoinData.create(field.getType(), field, alias, R2oJoinType.MANY_TO_ONE, alreadyOneToMany));
+				/* 여기부터는 OneToMany 공통 메소드로 빠질 수 있다. TODO oneToMany는 already반영을 잊으면 안된다. */
+			} else if (field.isAnnotationPresent(R2dbcOneToMany.class)) {
+				query.getJoinQueue().add(JoinData.create(field.getType(), field, alias, R2oJoinType.ONE_TO_MANY, true));
+				/* 여기부터는 ManyToMany 공통 메소드로 빠질 수 있다. */
+			}	else if (field.isAnnotationPresent(R2dbcManyToMany.class)) {
+				query.getJoinQueue().add(JoinData.create(field.getType(), field, alias, R2oJoinType.MANY_TO_MANY, true));
+			} else {
+				R2oFieldUtils.addSelectFieldQuery(query, field, alias);
+			}
 
 		}
 

@@ -5,7 +5,11 @@ import org.springframework.r2dbc.core.DatabaseClient;
 
 public interface RelationMapper {
 
-  static <T> T toEntity(Readable row, Class<T> entityClass, DatabaseClient client) {
-    return null;
+  RelationMapper simple = new SimpleRelationMapper();
+
+  <T> T toEntity(Readable row, Class<T> entityClass, DatabaseClient client);
+
+  static RelationMapper simple() {
+    return simple;
   }
 }

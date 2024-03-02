@@ -1,9 +1,14 @@
 package com.r2dbc.orm.a_second_draft.interfaces;
 
 import com.r2dbc.orm.a_second_draft.QueryFactory;
+import com.r2dbc.orm.a_second_draft.map.RelationMapper;
 import com.r2dbc.orm.a_second_draft.query.creator.QueryCreator;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.r2dbc.core.DatabaseClient;
+import reactor.core.publisher.Flux;
+import reactor.core.scheduler.Schedulers;
 
 /**
  * OneToMany,ManyToMany를 타겟 엔티티 내부에서만 서치하는 심플한 레포지터리.
@@ -18,7 +23,9 @@ public class R2dbcOrmSimpleRepository<T, ID>
 	private final Class<T> entityClass;
   private final Class<ID> idClass;
 
-  private final String selectQuery;
+  @Getter
+	private final String selectQuery;
+	private final RelationMapper relationMapper;
 
 
   /**
@@ -31,18 +38,21 @@ public class R2dbcOrmSimpleRepository<T, ID>
     this.entityClass = entityClass;
     this.idClass = idClass;
 		this.selectQuery = queryCreator.createSelectQueryWithJoin(entityClass).toString();
-
-
+		this.relationMapper = RelationMapper.simple();
 		//    this.countQuery = queryCreator.count(entityClass);
 //    this.selectQuery = queryCreator.select(entityClass, idClass);
 //    this.findByIdQuery = selectQuery + queryCreator.filterById(entityClass, idClass);
   }
 
-  public String getSelectQuery() {
-    return selectQuery;
-  }
+	@Override
+	public Flux<T> findAll(DatabaseClient client) {
+		return client.sql(selectQuery)
+						.map(row -> relationMapper.toEntity(row, entityClass, client))
+						.all()
+						.log();
+	}
 
-//  @Override
+					//  @Override
 //  public Mono<T> findById(ID id, DatabaseClient client) {
 //    return client.sql(findByIdQuery)
 //          .bind("id", id)
