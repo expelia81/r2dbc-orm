@@ -30,7 +30,7 @@ public class User {
   public User parent;
   public LocalDateTime createTime;
 
-  @R2dbcManyToOne(name = "location_id", targetColumnName = "id")
+  @R2dbcManyToOne(name = "location_id", targetColumnName = "")
   public Location location;
 
   @R2dbcOneToMany(name = "id", targetEntity = House.class, targetColumn = "owner_id")

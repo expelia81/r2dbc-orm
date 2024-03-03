@@ -4,9 +4,11 @@ import com.r2dbc.orm.a_second_draft.annotations.R2dbcManyToMany;
 import com.r2dbc.orm.a_second_draft.annotations.R2dbcManyToOne;
 import com.r2dbc.orm.a_second_draft.annotations.R2dbcOneToMany;
 import com.r2dbc.orm.a_second_draft.annotations.R2oTransient;
+import com.r2dbc.orm.a_second_draft.exceptions.R2oMappingException;
 import com.r2dbc.orm.a_second_draft.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Column;
 
@@ -21,7 +23,10 @@ public class R2oFieldUtils {
 
 		if (field.isAnnotationPresent(R2dbcManyToOne.class)) {
 			R2dbcManyToOne manyToOne = AnnotationUtils.getAnnotation(field, R2dbcManyToOne.class);
-			return manyToOne.targetColumnName();
+			if (R2oStringUtils.isBlank(manyToOne.targetColumnName()))
+				return getColumnName(R2oFieldUtils.getIdField(field.getType()));
+			else
+				return manyToOne.targetColumnName();
 		} else if (field.isAnnotationPresent(R2dbcManyToMany.class)) {
 			R2dbcManyToMany manyToMany = AnnotationUtils.getAnnotation(field, R2dbcManyToMany.class);
 			return manyToMany.manyColumnName();
@@ -32,6 +37,16 @@ public class R2oFieldUtils {
 			return getColumnName(field);
 		}
 	}
+
+	private static Field getIdField(Class<?> type) {
+		for(Field field : type.getDeclaredFields()) {
+			if (field.isAnnotationPresent(Id.class)) {
+				return field;
+			}
+		}
+		throw new R2oMappingException("Id Field is not exist in " + type.getName());
+	}
+
 	public static String getJoinOwnColumnName(Field field) {
 		if (field.isAnnotationPresent(R2dbcManyToOne.class)) {
 			R2dbcManyToOne manyToOne = AnnotationUtils.getAnnotation(field, R2dbcManyToOne.class);

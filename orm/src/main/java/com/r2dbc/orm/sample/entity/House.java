@@ -18,13 +18,13 @@ public class House {
 
   private String name;
 
-  @R2dbcManyToOne(name = "locationId", targetColumnName = "id")
+  @R2dbcManyToOne(name = "location_id", targetColumnName = "id")
   private Location location;
 
 //  @R2dbcManyToOne(name = "country_id", targetColumnName = "id")
 //  private String countryId;
 
-  @R2dbcManyToOne(name = "ownerId", targetColumnName = "id")
+  @R2dbcManyToOne(name = "owner_id", targetColumnName = "id")
   private User owner;
 
 }

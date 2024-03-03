@@ -2,6 +2,7 @@ package com.r2dbc.orm.a_second_draft.interfaces;
 
 import com.r2dbc.orm.a_second_draft.QueryFactory;
 import com.r2dbc.orm.a_second_draft.map.RelationMapper;
+import com.r2dbc.orm.a_second_draft.map.merge.R2oMergeUtils;
 import com.r2dbc.orm.a_second_draft.query.creator.QueryCreator;
 
 import lombok.Getter;
@@ -49,6 +50,8 @@ public class R2dbcOrmSimpleRepository<T, ID>
 		return client.sql(selectQuery)
 						.map(row -> relationMapper.toEntity(row, entityClass, client))
 						.all()
+						.collectList()
+						.flatMapMany(result -> R2oMergeUtils.mergeFromResult(result, entityClass))
 						.log();
 	}
 

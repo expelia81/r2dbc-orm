@@ -18,21 +18,23 @@ public @interface R2dbcManyToOne{
   String value() default "id";
 
   /**
-   * 테이블 자신의 칼럼명을 의미한다.
+   * own column name    ex) user_id
    */
   @AliasFor("value")
   String name() default "id";
 
   /**
-   * join 대상 테이블의 별칭.
-   * 자기 참조 테이블의 경우에 반드시 지정해야한다.
-   * 미정시 해당 테이블의 별칭은 기본 별칭을 따른다.
+   * join target entity's alias name.
+   * if empty, use target entity's table name.
+   *
+   * already mapped alias name is not searched.
    */
   String alias() default "";
 
   /**
-   * join 대상 테이블의 join 기준 컬럼명.
-   * 비어있을 경우, 해당 엔티티의 @Id 칼럼명을 따른다.
+   * join target entity's join condition column name
+   *
+   * if empty, use target entity's primary key column name (used @Id field's name).
    */
   String targetColumnName() default "";
 
